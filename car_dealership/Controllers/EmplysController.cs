@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using dal;
 using System.Data;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace car_dealership.Controllers
 {
@@ -19,19 +20,24 @@ namespace car_dealership.Controllers
         }
 
 
-        // GET: Emplys/Details
-        public ActionResult Details()
-        {
-
-            Conductos conductos = new Conductos();
-            conductos.GetEmply();
-            return View();
-        }
-
         // GET: Emplys/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Conductos conductos = new Conductos();
+            EmplyModel emplyModel = new EmplyModel();
+            string getEmplyByIdJson = conductos.GetEmply(id);
+            List<EmplyModel> list = JsonSerializer.Deserialize<List<EmplyModel>>(getEmplyByIdJson);
+            foreach (var item in list)
+            {
+                emplyModel.EmplyID = item.EmplyID;
+                emplyModel.Initial = item.Initial;
+                emplyModel.FirstName = item.FirstName;
+                emplyModel.LastName = item.LastName;
+                emplyModel.Type = item.Type;
+
+
+            }
+            return View(emplyModel);
         }
 
         // GET: Emplys/Create
@@ -49,7 +55,6 @@ namespace car_dealership.Controllers
             {
                 Conductos conductos = new Conductos();
                 conductos.AddEmply(emply.FirstName!, emply.LastName!, emply.Type!);
-                ViewData["Message"] = " BALALAALA";
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -61,6 +66,7 @@ namespace car_dealership.Controllers
         // GET: Emplys/Edit/5
         public ActionResult Edit(int id)
         {
+
             return View();
         }
 
@@ -82,7 +88,21 @@ namespace car_dealership.Controllers
         // GET: Emplys/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Conductos conductos = new Conductos();
+            EmplyModel emplyModel = new EmplyModel();
+            string getEmplyByIdJson = conductos.GetEmply(id);
+            List<EmplyModel> list = JsonSerializer.Deserialize<List<EmplyModel>>(getEmplyByIdJson);
+            foreach (var item in list)
+            {
+                emplyModel.EmplyID = item.EmplyID;
+                emplyModel.Initial = item.Initial;
+                emplyModel.FirstName = item.FirstName;
+                emplyModel.LastName = item.LastName;
+                emplyModel.Type = item.Type;
+
+
+            }
+            return View(emplyModel);
         }
 
         // POST: Emplys/Delete/5
@@ -92,6 +112,8 @@ namespace car_dealership.Controllers
         {
             try
             {
+                Conductos conductos = new Conductos();
+                conductos.DeleteEmply(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
