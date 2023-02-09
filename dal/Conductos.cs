@@ -152,6 +152,40 @@ namespace dal
             }
         }
 
+        //Delte Emply detail based on Emplyee id
+        public string UpdateEmply(int emplyId)
+        {
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "10.130.54.80";
+                builder.UserID = "sa";
+                builder.Password = "A1234a56!89";
+                builder.InitialCatalog = "cardealership";
+                string tabel = "emplys";
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    Console.WriteLine("\nQuery data example:");
+                    Console.WriteLine("=========================================\n");
+                    String sql = "UPDATE " + tabel + " WHERE emply_id=" + emplyId + ";";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        return "success";
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+                return e.ToString();
+            }
+        }
+
 
     }
 }
