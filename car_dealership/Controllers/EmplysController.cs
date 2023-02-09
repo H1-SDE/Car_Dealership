@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using dal;
 using System.Data;
+using System.Text.Json;
 
 namespace car_dealership.Controllers
 {
@@ -12,26 +13,11 @@ namespace car_dealership.Controllers
         public ActionResult Index()
         {
             Conductos conductos = new Conductos();
-            conductos.GetEmply();
-            //foreach(var item in conductos.GetEmply())
-            //{
-            //    return View(item);
-            //}
-            return View();
+            string getEmplyJson = conductos.GetEmply();
+            List<EmplyModel> list = JsonSerializer.Deserialize<List<EmplyModel>>(getEmplyJson)!;
+            return View(list);
         }
 
-        public ActionResult Index2(EmplyModel emply)
-        {
-            Conductos conductos = new Conductos();
-            foreach(var item in conductos.GetEmply())
-            {
-                emply.FirstName += item;
-                emply.LastName += item;
-                emply.Type += item;
-
-            }
-            return View(emply);
-        }
 
         // GET: Emplys/Details
         public ActionResult Details()

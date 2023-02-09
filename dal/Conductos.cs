@@ -41,9 +41,9 @@ namespace dal
             }
         }
 
-        public List<string> GetEmply()
+        public string GetEmply()
         {
-            List<string> values= new List<string>();
+            List<string> values = new List<string>();
             try
             {
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
@@ -57,26 +57,25 @@ namespace dal
                 {
                     Console.WriteLine("\nQuery data example:");
                     Console.WriteLine("=========================================\n");
-                    String sql = "SELECT TOP (50) emply_id, first_name, last_name , initial , emply_type from " + tabel + ";";
+                    String sql = "SELECT TOP (50) emply_id, first_name, last_name , initial , emply_type from " + tabel + " FOR JSON AUTO;";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
                         connection.Open();
+                        var jsonResult = new StringBuilder();
                         SqlDataReader oReader = command.ExecuteReader();
                         while (oReader.Read())
                         {
-                            values.Add(oReader["first_name"].ToString());
-                            values.Add(oReader["last_name"].ToString());
-                            return values;
+                            jsonResult.Append(oReader[0]);
                         }
-                        return values;
+                        return jsonResult.ToString();
                     }
                 }
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e.ToString());
-                return values;
+                return "";
             }
         }
 
